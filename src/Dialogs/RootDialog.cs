@@ -24,6 +24,22 @@ namespace bot_sample.Dialogs
                 case "other":
                     context.Call(new OtherDialog(), ResumeAfterOtherDialog);
                     break;
+                case "luis":
+                    context.Call(new LanguageDialog(), (ctx, rst) => {
+                        context.Wait(MessageReceivedAsync);
+                        return Task.CompletedTask;
+                    });
+                    break;
+                case "qna":
+                    var baseUri = "";
+                    var knowledgeBaseId = "";
+                    var endpointKey = "";
+
+                    context.Call(new QnADialog(baseUri, knowledgeBaseId, endpointKey), (ctx, rst) => {
+                        context.Wait(MessageReceivedAsync);
+                        return Task.CompletedTask;
+                    });
+                    break;
                 default:
                     await context.PostAsync($"You sent {activity.Text} which was {activity.Text.Length} characters");
                     context.Wait(MessageReceivedAsync);
