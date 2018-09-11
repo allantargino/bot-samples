@@ -5,6 +5,7 @@ using Microsoft.Bot.Builder.Dialogs.Internals;
 using Autofac;
 using Microsoft.Bot.Connector;
 using System.Reflection;
+using bot_sample.Scorables;
 
 namespace bot_sample
 {
@@ -33,6 +34,12 @@ namespace bot_sample
                     .Keyed<IBotDataStore<BotData>>(AzureModule.Key_DataStore)
                     .AsSelf()
                     .SingleInstance();
+
+                builder
+                    .RegisterType<Reset>()
+                    .Keyed<Reset>(typeof(Reset).Name)
+                    .AsImplementedInterfaces()
+                    .InstancePerMatchingLifetimeScope(DialogModule.LifetimeScopeTag);
             });
         }
     }

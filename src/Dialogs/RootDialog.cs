@@ -19,11 +19,25 @@ namespace bot_sample.Dialogs
         {
             var activity = await result as Activity;
 
-            // Calculate something for us to return
-            int length = (activity.Text ?? string.Empty).Length;
+            switch (activity.Text.ToLower())
+            {
+                case "other":
+                    context.Call(new OtherDialog(), ResumeAfterOtherDialog);
+                    break;
+                default:
+                    await context.PostAsync($"You sent {activity.Text} which was {activity.Text.Length} characters");
+                    context.Wait(MessageReceivedAsync);
+                    break;
+            }
+        }
 
-            // Return our reply to the user
-            await context.PostAsync($"You sent {activity.Text} which was {length} characters");
+        private async Task ResumeAfterOtherDialog(IDialogContext context, IAwaitable<string> result)
+        {
+            var resultFromDialog = await result;
+
+            await context.PostAsync($"I received from the other dialog: {resultFromDialog}");
+
+            await context.PostAsync($"Waiting for messages again.");
 
             context.Wait(MessageReceivedAsync);
         }
