@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using bot_sample.Helpers;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 
@@ -31,9 +32,9 @@ namespace bot_sample.Dialogs
                     });
                     break;
                 case "qna":
-                    var baseUri = "";
-                    var knowledgeBaseId = "";
-                    var endpointKey = "";
+                    var baseUri = ConfigurationHelper.LuisBaseUri;
+                    var knowledgeBaseId = ConfigurationHelper.LuisKnowledgeBaseId;
+                    var endpointKey = ConfigurationHelper.LuisEndpointKey;
 
                     context.Call(new QnADialog(baseUri, knowledgeBaseId, endpointKey), (ctx, rst) => {
                         context.Wait(MessageReceivedAsync);
